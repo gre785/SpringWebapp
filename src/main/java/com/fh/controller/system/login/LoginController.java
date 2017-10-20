@@ -34,7 +34,7 @@ import com.fh.util.PageData;
 import com.fh.util.RightsHelper;
 import com.fh.util.Tools;
 /*
- * 总入口
+ * main entry
  */
 @Controller
 public class LoginController extends BaseController {
