@@ -51,9 +51,8 @@ public interface DAO
     /**
      * @param statement Unique identifier matching the statement to use.
      * @param parameter A parameter object to pass to the statement.
-     * @return Map of mapped objects
      * @param key
-     * @return
+     * @return Map of mapped objects
      * @throws Exception
      */
     public Object findForMap(String statement, Object parameter, String key)
