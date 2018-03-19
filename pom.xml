@@ -15,6 +15,7 @@
 		<spring.version>4.0.4.RELEASE</spring.version>
 		<mysql-connector-java.version>5.1.34</mysql-connector-java.version>
 		<powermock.version>1.7.0</powermock.version>
+		<java.jre.version>1.8</java.jre.version>
 	</properties>
 
 	<dependencies>
@@ -552,5 +553,14 @@
 	</dependencies>
 	<build>
 		<finalName>FHM</finalName>
+		<plugins>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>${java.jre.version}</source>
+					<target>${java.jre.version}</target>
+				</configuration>
+			</plugin>
+		</plugins>
 	</build>
 </project>
