@@ -1,3 +1,4 @@
+
 package com.fh.dao;
 
 import java.util.List;
@@ -11,117 +12,76 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 
 @Repository("daoSupport")
-public class DaoSupport implements DAO {
+public class DaoSupport
+    implements DAO
+{
 
-	@Resource(name = "sqlSessionTemplate")
-	private SqlSessionTemplate sqlSessionTemplate;
-	
-	/**
-	 * 保存对象
-	 * @param str
-	 * @param obj
-	 * @return
-	 * @throws Exception
-	 */
-	public Object save(String str, Object obj) throws Exception {
-		return sqlSessionTemplate.insert(str, obj);
-	}
-	
-	/**
-	 * 批量更新
-	 * @param str
-	 * @param obj
-	 * @return
-	 * @throws Exception
-	 */
-	public Object batchSave(String str, List objs )throws Exception{
-		return sqlSessionTemplate.insert(str, objs);
-	}
-	
-	/**
-	 * 修改对象
-	 * @param str
-	 * @param obj
-	 * @return
-	 * @throws Exception
-	 */
-	public Object update(String str, Object obj) throws Exception {
-		return sqlSessionTemplate.update(str, obj);
-	}
+    @Resource(name = "sqlSessionTemplate")
+    private SqlSessionTemplate sqlSessionTemplate;
 
-	/**
-	 * 批量更新
-	 * @param str
-	 * @param obj
-	 * @return
-	 * @throws Exception
-	 */
-	public void batchUpdate(String str, List objs )throws Exception{
-		SqlSessionFactory sqlSessionFactory = sqlSessionTemplate.getSqlSessionFactory();
-		//批量执行器
-		SqlSession sqlSession = sqlSessionFactory.openSession(ExecutorType.BATCH,false);
-		try{
-			if(objs!=null){
-				for(int i=0,size=objs.size();i<size;i++){
-					sqlSession.update(str, objs.get(i));
-				}
-				sqlSession.flushStatements();
-				sqlSession.commit();
-				sqlSession.clearCache();
-			}
-		}finally{
-			sqlSession.close();
-		}
-	}
-	
-	/**
-	 * 批量更新
-	 * @param str
-	 * @param obj
-	 * @return
-	 * @throws Exception
-	 */
-	public Object batchDelete(String str, List objs )throws Exception{
-		return sqlSessionTemplate.delete(str, objs);
-	}
-	
-	/**
-	 * 删除对象 
-	 * @param str
-	 * @param obj
-	 * @return
-	 * @throws Exception
-	 */
-	public Object delete(String str, Object obj) throws Exception {
-		return sqlSessionTemplate.delete(str, obj);
-	}
-	 
-	/**
-	 * 查找对象
-	 * @param str
-	 * @param obj
-	 * @return
-	 * @throws Exception
-	 */
-	public Object findForObject(String str, Object obj) throws Exception {
-		return sqlSessionTemplate.selectOne(str, obj);
-	}
+    public Object save(String statement, Object parameter)
+        throws Exception
+    {
+        return sqlSessionTemplate.insert(statement, parameter);
+    }
 
-	/**
-	 * 查找对象
-	 * @param str
-	 * @param obj
-	 * @return
-	 * @throws Exception
-	 */
-	public Object findForList(String str, Object obj) throws Exception {
-		return sqlSessionTemplate.selectList(str, obj);
-	}
-	
-	public Object findForMap(String str, Object obj, String key, String value) throws Exception {
-		return sqlSessionTemplate.selectMap(str, obj, key);
-	}
-	
+    public Object batchSave(String statement, List<Object> parameters)
+        throws Exception
+    {
+        return sqlSessionTemplate.insert(statement, parameters);
+    }
+
+    public Object update(String statement, Object parameter)
+        throws Exception
+    {
+        return sqlSessionTemplate.update(statement, parameter);
+    }
+
+    public void batchUpdate(String statement, List<Object> parameters)
+        throws Exception
+    {
+        SqlSessionFactory sqlSessionFactory = sqlSessionTemplate.getSqlSessionFactory();
+        SqlSession sqlSession = sqlSessionFactory.openSession(ExecutorType.BATCH, false);
+        try {
+            for (Object parameter : parameters) {
+                sqlSession.update(statement, parameter);
+            }
+            sqlSession.flushStatements();
+            sqlSession.commit();
+            sqlSession.clearCache();
+        } finally {
+            sqlSession.close();
+        }
+    }
+
+    public Object batchDelete(String statement, List<Object> parameters)
+        throws Exception
+    {
+        return sqlSessionTemplate.delete(statement, parameters);
+    }
+
+    public Object delete(String statement, Object parameter)
+        throws Exception
+    {
+        return sqlSessionTemplate.delete(statement, parameter);
+    }
+
+    public Object findForObject(String statement, Object parameter)
+        throws Exception
+    {
+        return sqlSessionTemplate.selectOne(statement, parameter);
+    }
+
+    public Object findForList(String statement, Object parameter)
+        throws Exception
+    {
+        return sqlSessionTemplate.selectList(statement, parameter);
+    }
+
+    public Object findForMap(String statement, Object parameter, String key)
+        throws Exception
+    {
+        return sqlSessionTemplate.selectMap(statement, parameter, key);
+    }
+
 }
-
-
