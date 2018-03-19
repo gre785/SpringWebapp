@@ -17,30 +17,30 @@ public class DaoSupport
 {
 
     @Resource(name = "sqlSessionTemplate")
-    private SqlSessionTemplate sqlSessionTemplate;
+    private SqlSessionTemplate _sqlSessionTemplate;
 
     public Object save(String statement, Object parameter)
         throws Exception
     {
-        return sqlSessionTemplate.insert(statement, parameter);
+        return _sqlSessionTemplate.insert(statement, parameter);
     }
 
     public Object batchSave(String statement, List<Object> parameters)
         throws Exception
     {
-        return sqlSessionTemplate.insert(statement, parameters);
+        return _sqlSessionTemplate.insert(statement, parameters);
     }
 
     public Object update(String statement, Object parameter)
         throws Exception
     {
-        return sqlSessionTemplate.update(statement, parameter);
+        return _sqlSessionTemplate.update(statement, parameter);
     }
 
     public void batchUpdate(String statement, List<Object> parameters)
         throws Exception
     {
-        SqlSessionFactory sqlSessionFactory = sqlSessionTemplate.getSqlSessionFactory();
+        SqlSessionFactory sqlSessionFactory = _sqlSessionTemplate.getSqlSessionFactory();
         SqlSession sqlSession = sqlSessionFactory.openSession(ExecutorType.BATCH, false);
         try {
             for (Object parameter : parameters) {
@@ -57,31 +57,31 @@ public class DaoSupport
     public Object batchDelete(String statement, List<Object> parameters)
         throws Exception
     {
-        return sqlSessionTemplate.delete(statement, parameters);
+        return _sqlSessionTemplate.delete(statement, parameters);
     }
 
     public Object delete(String statement, Object parameter)
         throws Exception
     {
-        return sqlSessionTemplate.delete(statement, parameter);
+        return _sqlSessionTemplate.delete(statement, parameter);
     }
 
     public Object findForObject(String statement, Object parameter)
         throws Exception
     {
-        return sqlSessionTemplate.selectOne(statement, parameter);
+        return _sqlSessionTemplate.selectOne(statement, parameter);
     }
 
     public Object findForList(String statement, Object parameter)
         throws Exception
     {
-        return sqlSessionTemplate.selectList(statement, parameter);
+        return _sqlSessionTemplate.selectList(statement, parameter);
     }
 
     public Object findForMap(String statement, Object parameter, String key)
         throws Exception
     {
-        return sqlSessionTemplate.selectMap(statement, parameter, key);
+        return _sqlSessionTemplate.selectMap(statement, parameter, key);
     }
 
 }
