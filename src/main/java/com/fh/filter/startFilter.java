@@ -60,22 +60,18 @@ public class startFilter
     public void timer()
     {
         Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR_OF_DAY, 9);  // 控制时
-        calendar.set(Calendar.MINUTE, 0); 		// 控制分
-        calendar.set(Calendar.SECOND, 0); 		// 控制秒
-
-        Date time = calendar.getTime(); 		// 得出执行任务的时间
-
+        calendar.set(Calendar.HOUR_OF_DAY, 9);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        Date time = calendar.getTime();
         Timer timer = new Timer();
         timer.scheduleAtFixedRate(new TimerTask()
         {
             public void run()
             {
-
                 // PersonService personService = (PersonService)ApplicationContext.getBean("personService");
-
             }
-        }, time, 1000 * 60 * 60 * 24);// 这里设定将延时每天固定执行
+        }, time, 1000 * 60 * 60 * 24);
     }
 
     public void destroy()
