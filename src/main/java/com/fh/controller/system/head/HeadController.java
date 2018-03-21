@@ -93,7 +93,7 @@ public class HeadController extends BaseController {
 			
 			String USERNAME = session.getAttribute(Const.SESSION_USERNAME).toString();//获取当前登录者loginname
 			pd.put("USERNAME", USERNAME);
-			userService.setSKIN(pd);
+			userService.setSkin(pd);
 			session.removeAttribute(Const.SESSION_userpds);
 			session.removeAttribute(Const.SESSION_USERROL);
 			out.write("success");

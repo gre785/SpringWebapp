@@ -1,3 +1,4 @@
+
 package com.fh.service.system.menu;
 
 import java.util.List;
@@ -11,78 +12,94 @@ import com.fh.entity.system.Menu;
 import com.fh.util.PageData;
 
 @Service("menuService")
-public class MenuService{
+public class MenuService
+{
 
-	@Resource(name = "daoSupport")
-	private DaoSupport dao;
-	
-	
-	public void deleteMenuById(String MENU_ID) throws Exception {
-		dao.save("MenuMapper.deleteMenuById", MENU_ID);
-		
-	}
+    @Resource(name = "daoSupport")
+    private DaoSupport _dao;
 
-	public PageData getMenuById(PageData pd) throws Exception {
-		return (PageData) dao.findForObject("MenuMapper.getMenuById", pd);
-		
-	}
+    public void deleteMenuById(String MENU_ID)
+        throws Exception
+    {
+        _dao.save("MenuMapper.deleteMenuById", MENU_ID);
 
-	//取最大id
-	public PageData findMaxId(PageData pd) throws Exception {
-		return (PageData) dao.findForObject("MenuMapper.findMaxId", pd);
-		
-	}
-	
-	public List<Menu> listAllParentMenu() throws Exception {
-		return (List<Menu>) dao.findForList("MenuMapper.listAllParentMenu", null);
-		
-	}
+    }
 
-	public void saveMenu(Menu menu) throws Exception {
-		if(menu.getMENU_ID()!=null && menu.getMENU_ID() != ""){
-			//dao.update("MenuMapper.updateMenu", menu);
-			dao.save("MenuMapper.insertMenu", menu);
-		}else{
-			dao.save("MenuMapper.insertMenu", menu);
-		}
-	}
+    public PageData getMenuById(PageData pd)
+        throws Exception
+    {
+        return (PageData)_dao.findForObject("MenuMapper.getMenuById", pd);
 
-	public List<Menu> listSubMenuByParentId(String parentId) throws Exception {
-		return (List<Menu>) dao.findForList("MenuMapper.listSubMenuByParentId", parentId);
-		
-	}
-		
-	public List<Menu> listAllMenu() throws Exception {
-		List<Menu> rl = this.listAllParentMenu();
-		for(Menu menu : rl){
-			List<Menu> subList = this.listSubMenuByParentId(menu.getMENU_ID());
-			menu.setSubMenu(subList);
-		}
-		return rl;
-	}
+    }
 
-	public List<Menu> listAllSubMenu() throws Exception{
-		return (List<Menu>) dao.findForList("MenuMapper.listAllSubMenu", null);
-		
-	}
-	
-	/**
-	 * 编辑
-	 */
-	public PageData edit(PageData pd) throws Exception {
-		return (PageData)dao.findForObject("MenuMapper.updateMenu", pd);
-	}
-	/**
-	 * 保存菜单图标 (顶部菜单)
-	 */
-	public PageData editicon(PageData pd) throws Exception {
-		return (PageData)dao.findForObject("MenuMapper.editicon", pd);
-	}
-	
-	/**
-	 * 更新子菜单类型菜单
-	 */
-	public PageData editType(PageData pd) throws Exception {
-		return (PageData)dao.findForObject("MenuMapper.editType", pd);
-	}
+    public PageData findMaxId(PageData pd)
+        throws Exception
+    {
+        return (PageData)_dao.findForObject("MenuMapper.findMaxId", pd);
+
+    }
+
+    @SuppressWarnings("unchecked")
+    public List<Menu> listAllParentMenu()
+        throws Exception
+    {
+        return (List<Menu>)_dao.findForList("MenuMapper.listAllParentMenu", null);
+
+    }
+
+    public void saveMenu(Menu menu)
+        throws Exception
+    {
+        if (menu.getMENU_ID() != null && menu.getMENU_ID() != "") {
+            // dao.update("MenuMapper.updateMenu", menu);
+            _dao.save("MenuMapper.insertMenu", menu);
+        } else {
+            _dao.save("MenuMapper.insertMenu", menu);
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    public List<Menu> listSubMenuByParentId(String parentId)
+        throws Exception
+    {
+        return (List<Menu>)_dao.findForList("MenuMapper.listSubMenuByParentId", parentId);
+
+    }
+
+    public List<Menu> listAllMenu()
+        throws Exception
+    {
+        List<Menu> rl = this.listAllParentMenu();
+        for (Menu menu : rl) {
+            List<Menu> subList = this.listSubMenuByParentId(menu.getMENU_ID());
+            menu.setSubMenu(subList);
+        }
+        return rl;
+    }
+
+    @SuppressWarnings("unchecked")
+    public List<Menu> listAllSubMenu()
+        throws Exception
+    {
+        return (List<Menu>)_dao.findForList("MenuMapper.listAllSubMenu", null);
+
+    }
+
+    public PageData edit(PageData pd)
+        throws Exception
+    {
+        return (PageData)_dao.findForObject("MenuMapper.updateMenu", pd);
+    }
+
+    public PageData editicon(PageData pd)
+        throws Exception
+    {
+        return (PageData)_dao.findForObject("MenuMapper.editicon", pd);
+    }
+
+    public PageData editType(PageData pd)
+        throws Exception
+    {
+        return (PageData)_dao.findForObject("MenuMapper.editType", pd);
+    }
 }

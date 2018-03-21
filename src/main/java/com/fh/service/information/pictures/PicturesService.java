@@ -16,7 +16,7 @@ public class PicturesService
 {
 
     @Resource(name = "daoSupport")
-    private DaoSupport dao;
+    private DaoSupport _dao;
 
     /*
     * add
@@ -24,7 +24,7 @@ public class PicturesService
     public void save(PageData pd)
         throws Exception
     {
-        dao.save("PicturesMapper.save", pd);
+        _dao.save("PicturesMapper.save", pd);
     }
 
     /*
@@ -33,7 +33,7 @@ public class PicturesService
     public void delete(PageData pd)
         throws Exception
     {
-        dao.delete("PicturesMapper.delete", pd);
+        _dao.delete("PicturesMapper.delete", pd);
     }
 
     /*
@@ -42,7 +42,7 @@ public class PicturesService
     public void edit(PageData pd)
         throws Exception
     {
-        dao.update("PicturesMapper.edit", pd);
+        _dao.update("PicturesMapper.edit", pd);
     }
 
     /*
@@ -51,7 +51,7 @@ public class PicturesService
     public List<PageData> list(Page page)
         throws Exception
     {
-        return (List<PageData>)dao.findForList("PicturesMapper.datalistPage", page);
+        return (List<PageData>)_dao.findForList("PicturesMapper.datalistPage", page);
     }
 
     /*
@@ -60,7 +60,7 @@ public class PicturesService
     public List<PageData> listAll(PageData pd)
         throws Exception
     {
-        return (List<PageData>)dao.findForList("PicturesMapper.listAll", pd);
+        return (List<PageData>)_dao.findForList("PicturesMapper.listAll", pd);
     }
 
     /*
@@ -69,7 +69,7 @@ public class PicturesService
     public PageData findById(PageData pd)
         throws Exception
     {
-        return (PageData)dao.findForObject("PicturesMapper.findById", pd);
+        return (PageData)_dao.findForObject("PicturesMapper.findById", pd);
     }
 
     /*
@@ -78,7 +78,7 @@ public class PicturesService
     public void deleteAll(String[] ArrayDATA_IDS)
         throws Exception
     {
-        dao.delete("PicturesMapper.deleteAll", ArrayDATA_IDS);
+        _dao.delete("PicturesMapper.deleteAll", ArrayDATA_IDS);
     }
 
     /*
@@ -87,7 +87,7 @@ public class PicturesService
     public List<PageData> getAllById(String[] ArrayDATA_IDS)
         throws Exception
     {
-        return (List<PageData>)dao.findForList("PicturesMapper.getAllById", ArrayDATA_IDS);
+        return (List<PageData>)_dao.findForList("PicturesMapper.getAllById", ArrayDATA_IDS);
     }
 
     /*
@@ -96,7 +96,7 @@ public class PicturesService
     public void delTp(PageData pd)
         throws Exception
     {
-        dao.update("PicturesMapper.delTp", pd);
+        _dao.update("PicturesMapper.delTp", pd);
     }
 
 }
