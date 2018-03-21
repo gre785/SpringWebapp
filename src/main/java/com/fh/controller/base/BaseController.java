@@ -31,20 +31,16 @@ public class BaseController
 
     public HttpServletRequest getRequest()
     {
-        HttpServletRequest request = ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest();
-
-        return request;
+        return ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest();
     }
 
     public String get32UUID()
     {
-
         return UuidUtil.get32UUID();
     }
 
     public Page getPage()
     {
-
         return new Page();
     }
 
