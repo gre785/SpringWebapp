@@ -33,11 +33,6 @@ import com.fh.util.Tools;
 import com.fh.util.Jurisdiction;
 import com.fh.service.${packageName}.${objectNameLower}.${objectName}Service;
 
-/** 
- * 类名称：${objectName}Controller
- * 创建人：FH 
- * 创建时间：${nowDate?string("yyyy-MM-dd")}
- */
 @Controller
 @RequestMapping(value="/${objectNameLower}")
 public class ${objectName}Controller extends BaseController {
