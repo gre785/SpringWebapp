@@ -29,7 +29,6 @@ import com.fh.util.Tools;
 public class IntAppuserController
     extends BaseController
 {
-
     @Resource(name = "appuserService")
     private AppuserService _appuserService;
 
@@ -39,17 +38,14 @@ public class IntAppuserController
     {
         logBefore(logger, "retrieve user infor through UID");
         Map<String, Object> map = new HashMap<String, Object>();
-        PageData pd = new PageData();
-        pd = this.getPageData();
+        PageData pd = getPageData();
         String result = "00";
-
         try {
             if (Tools.checkKey("USERNAME", pd.getString("FKEY"))) {
                 if (AppUtil.checkParam("getAppuserByUsernmae", pd)) {
                     pd = _appuserService.findByUId(pd);
                     map.put("pd", pd);
                     result = (null == pd) ? "02" : "01";
-
                 } else {
                     result = "03";
                 }
@@ -62,7 +58,6 @@ public class IntAppuserController
             map.put("result", result);
             logAfter(logger);
         }
-
         return AppUtil.returnObject(new PageData(), map);
     }
 

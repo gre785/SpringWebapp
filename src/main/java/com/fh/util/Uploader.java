@@ -17,31 +17,30 @@ import javax.servlet.http.HttpServletRequest;
 public class Uploader
 {
     private static final int MAX_SIZE = 500 * 1024;
-    private String url = "";
-    private String fileName = "";
-    private String state = "";
-    private String type = "";
-    private String originalName = "";
-    private String size = "";
-    private HttpServletRequest request = null;
-    private String title = "";
-    private String savePath = "upload";
-    private String[] allowFiles = { ".rar", ".doc", ".docx", ".zip", ".pdf", ".txt", ".swf", ".wmv", ".gif", ".png", ".jpg", ".jpeg", ".bmp"};
-    private long maxSize = 0;
-    private HashMap<String, String> errorInfo = new HashMap<String, String>();
-    private Map<String, String> params = null;
-    private InputStream inputStream = null;
+    private String _url = "";
+    private String _fileName = "";
+    private String _state = "";
+    private String _type = "";
+    private String _originalName = "";
+    private String _size = "";
+    private String _title = "";
+    private String _savePath = "upload";
+    private String[] _allowFiles = { ".rar", ".doc", ".docx", ".zip", ".pdf", ".txt", ".swf", ".wmv", ".gif", ".png", ".jpg", ".jpeg", ".bmp"};
+    private HashMap<String, String> _errorInfo = new HashMap<String, String>();
+    private Map<String, String> _params = null;
+    private InputStream _inputStream = null;
+    private HttpServletRequest _request = null;
+    private long _maxSize = 0;
 
     public static final String ENCODEING = System.getProperties().getProperty("file.encoding");
 
     public Uploader(HttpServletRequest request)
     {
-        this.request = request;
-        this.params = new HashMap<String, String>();
-
-        this.setMaxSize(Uploader.MAX_SIZE);
-
-        HashMap<String, String> tmp = this.errorInfo;
+        _request = request;
+        _params = new HashMap<String, String>();
+        setMaxSize(Uploader.MAX_SIZE);
+        // tmp is never userd?
+        HashMap<String, String> tmp = _errorInfo;
         tmp.put("SUCCESS", "SUCCESS");
         tmp.put("NOFILE", "\\u672a\\u5305\\u542b\\u6587\\u4ef6\\u4e0a\\u4f20\\u57df");
         // 不允许的文件格式
@@ -61,35 +60,33 @@ public class Uploader
         // 未知错误
         tmp.put("UNKNOWN", "\\u672a\\u77e5\\u9519\\u8bef");
 
-        this.parseParams();
-
+        parseParams();
     }
 
     public void upload()
         throws Exception
     {
-        boolean isMultipart = ServletFileUpload.isMultipartContent(this.request);
+        boolean isMultipart = ServletFileUpload.isMultipartContent(_request);
         if (!isMultipart) {
-            this.state = this.errorInfo.get("NOFILE");
+            _state = _errorInfo.get("NOFILE");
             return;
         }
-        if (this.inputStream == null) {
-            this.state = this.errorInfo.get("FILE");
+        if (_inputStream == null) {
+            _state = _errorInfo.get("FILE");
             return;
         }
-        this.title = this.getParameter("pictitle");
+        _title = getParameter("pictitle");
         try {
-            String savePath = this.getFolder(this.savePath);
-
-            if (!this.checkFileType(this.originalName)) {
-                this.state = this.errorInfo.get("TYPE");
+            String savePath = getFolder(_savePath);
+            if (!checkFileType(_originalName)) {
+                _state = _errorInfo.get("TYPE");
                 return;
             }
-            this.fileName = this.getName(this.originalName);
-            this.type = this.getFileExt(this.fileName);
-            this.url = savePath + "/" + this.fileName;
-            FileOutputStream fos = new FileOutputStream(this.getPhysicalPath(this.url));
-            BufferedInputStream bis = new BufferedInputStream(this.inputStream);
+            _fileName = getName(_originalName);
+            _type = getFileExt(_fileName);
+            _url = savePath + "/" + _fileName;
+            FileOutputStream fos = new FileOutputStream(getPhysicalPath(_url));
+            BufferedInputStream bis = new BufferedInputStream(_inputStream);
             byte[] buff = new byte[128];
             int count = -1;
             while ((count = bis.read(buff)) != -1) {
@@ -98,23 +95,23 @@ public class Uploader
             bis.close();
             fos.close();
 
-            this.state = this.errorInfo.get("SUCCESS");
+            _state = _errorInfo.get("SUCCESS");
         } catch (Exception e) {
             e.printStackTrace();
-            this.state = this.errorInfo.get("IO");
+            _state = _errorInfo.get("IO");
         }
 
     }
 
     public void uploadBase64(String fieldName)
     {
-        String savePath = this.getFolder(this.savePath);
-        String base64Data = this.request.getParameter(fieldName);
-        this.fileName = this.getName("test.png");
-        this.url = savePath + "/" + this.fileName;
+        String savePath = getFolder(_savePath);
+        String base64Data = _request.getParameter(fieldName);
+        _fileName = getName("test.png");
+        _url = savePath + "/" + _fileName;
         BASE64Decoder decoder = new BASE64Decoder();
         try {
-            File outFile = new File(this.getPhysicalPath(this.url));
+            File outFile = new File(getPhysicalPath(_url));
             OutputStream ro = new FileOutputStream(outFile);
             byte[] b = decoder.decodeBuffer(base64Data);
             for (int i = 0; i < b.length; ++i) {
@@ -125,20 +122,20 @@ public class Uploader
             ro.write(b);
             ro.flush();
             ro.close();
-            this.state = this.errorInfo.get("SUCCESS");
+            _state = _errorInfo.get("SUCCESS");
         } catch (Exception e) {
-            this.state = this.errorInfo.get("IO");
+            _state = _errorInfo.get("IO");
         }
     }
 
     public String getParameter(String name)
     {
-        return this.params.get(name);
+        return _params.get(name);
     }
 
     private boolean checkFileType(String fileName)
     {
-        Iterator<String> type = Arrays.asList(this.allowFiles).iterator();
+        Iterator<String> type = Arrays.asList(_allowFiles).iterator();
         while (type.hasNext()) {
             String ext = type.next();
             if (fileName.toLowerCase().endsWith(ext)) {
@@ -158,42 +155,42 @@ public class Uploader
         DiskFileItemFactory dff = new DiskFileItemFactory();
         try {
             ServletFileUpload sfu = new ServletFileUpload(dff);
-            sfu.setSizeMax(this.maxSize);
+            sfu.setSizeMax(_maxSize);
             sfu.setHeaderEncoding(Uploader.ENCODEING);
-            FileItemIterator fii = sfu.getItemIterator(this.request);
+            FileItemIterator fii = sfu.getItemIterator(_request);
             while (fii.hasNext()) {
                 FileItemStream item = fii.next();
                 if (item.isFormField()) {
-                    this.params.put(item.getFieldName(), this.getParameterValue(item.openStream()));
+                    _params.put(item.getFieldName(), getParameterValue(item.openStream()));
                 } else {
-                    if (this.inputStream == null) {
-                        this.inputStream = item.openStream();
-                        this.originalName = item.getName();
+                    if (_inputStream == null) {
+                        _inputStream = item.openStream();
+                        _originalName = item.getName();
                         return;
                     }
                 }
             }
         } catch (Exception e) {
-            this.state = this.errorInfo.get("UNKNOWN");
+            _state = _errorInfo.get("UNKNOWN");
         }
     }
 
     private String getName(String fileName)
     {
         Random random = new Random();
-        return this.fileName = "" + random.nextInt(10000) + System.currentTimeMillis() + this.getFileExt(fileName);
+        return _fileName = "" + random.nextInt(10000) + System.currentTimeMillis() + getFileExt(fileName);
     }
 
     private String getFolder(String path)
     {
         SimpleDateFormat formater = new SimpleDateFormat("yyyyMMdd");
         path += "/" + formater.format(new Date());
-        File dir = new File(this.getPhysicalPath(path));
+        File dir = new File(getPhysicalPath(path));
         if (!dir.exists()) {
             try {
                 dir.mkdirs();
             } catch (Exception e) {
-                this.state = this.errorInfo.get("DIR");
+                _state = _errorInfo.get("DIR");
                 return "";
             }
         }
@@ -202,8 +199,8 @@ public class Uploader
 
     private String getPhysicalPath(String path)
     {
-        String servletPath = this.request.getServletPath();
-        String realPath = this.request.getSession().getServletContext().getRealPath(servletPath);
+        String servletPath = _request.getServletPath();
+        String realPath = _request.getSession().getServletContext().getRealPath(servletPath);
         return new File(realPath).getParent() + "/" + path;
     }
 
@@ -233,51 +230,51 @@ public class Uploader
 
     public void setSavePath(String savePath)
     {
-        this.savePath = savePath;
+        _savePath = savePath;
     }
 
     public void setAllowFiles(String[] allowFiles)
     {
-        this.allowFiles = allowFiles;
+        _allowFiles = allowFiles;
     }
 
     public void setMaxSize(long size)
     {
-        this.maxSize = size * 1024;
+        _maxSize = size * 1024;
     }
 
     public String getSize()
     {
-        return this.size;
+        return _size;
     }
 
     public String getUrl()
     {
-        return this.url;
+        return _url;
     }
 
     public String getFileName()
     {
-        return this.fileName;
+        return _fileName;
     }
 
     public String getState()
     {
-        return this.state;
+        return _state;
     }
 
     public String getTitle()
     {
-        return this.title;
+        return _title;
     }
 
     public String getType()
     {
-        return this.type;
+        return _type;
     }
 
     public String getOriginalName()
     {
-        return this.originalName;
+        return _originalName;
     }
 }
