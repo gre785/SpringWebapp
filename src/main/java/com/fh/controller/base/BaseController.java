@@ -15,13 +15,13 @@ import com.fh.util.UuidUtil;
 public class BaseController
 {
 
-    protected Logger logger = Logger.getLogger(this.getClass());
+    protected Logger logger = Logger.getLogger(getClass());
 
     private static final long serialVersionUID = 6357869213649815390L;
 
     public PageData getPageData()
     {
-        return new PageData(this.getRequest());
+        return new PageData(getRequest());
     }
 
     public ModelAndView getModelAndView()

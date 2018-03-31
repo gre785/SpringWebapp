@@ -49,7 +49,7 @@ public class PicturesController
     extends BaseController
 {
 
-    String menuUrl = "pictures/list.do";
+    private static final String MENU_URL = "pictures/list.do";
     @Resource(name = "picturesService")
     private PicturesService _picturesService;
 
@@ -60,25 +60,26 @@ public class PicturesController
     {
         logBefore(logger, "新增Pictures");
         Map<String, String> map = new HashMap<String, String>();
-        String ffile = DateUtil.getDays(), fileName = "";
-        PageData pd = new PageData();
-        if (Jurisdiction.buttonJurisdiction(menuUrl, "add")) {
+        String dates = DateUtil.getDays();
+        String fileName = "";
+        PageData pd = getPageData();
+        if (Jurisdiction.buttonJurisdiction(MENU_URL, "add")) {
             if (null != file && !file.isEmpty()) {
-                String filePath = PathUtil.getClasspath() + Const.FILEPATHIMG + ffile;
-                fileName = FileUpload.fileUp(file, filePath, this.get32UUID());
+                String filePath = PathUtil.getClasspath() + Const.FILEPATHIMG + dates;
+                fileName = FileUpload.fileUp(file, filePath, get32UUID());
             } else {
                 System.out.println("upload fails");
             }
 
-            pd.put("PICTURES_ID", this.get32UUID());
+            pd.put("PICTURES_ID", get32UUID());
             pd.put("TITLE", "图片");
             pd.put("NAME", fileName);
-            pd.put("PATH", ffile + "/" + fileName);
+            pd.put("PATH", dates + "/" + fileName);
             pd.put("CREATETIME", Tools.date2Str(new Date()));
             pd.put("MASTER_ID", "1");
             pd.put("BZ", "图片管理处上传");
             // 加水印
-            Watermark.setWatemark(PathUtil.getClasspath() + Const.FILEPATHIMG + ffile + "/" + fileName);
+            Watermark.setWatemark(PathUtil.getClasspath() + Const.FILEPATHIMG + dates + "/" + fileName);
             _picturesService.save(pd);
         }
         map.put("result", "ok");
@@ -89,10 +90,9 @@ public class PicturesController
     public void delete(PrintWriter out)
     {
         logBefore(logger, "delete Pictures");
-        PageData pd = new PageData();
+        PageData pd = getPageData();
         try {
-            if (Jurisdiction.buttonJurisdiction(menuUrl, "del")) {
-                pd = this.getPageData();
+            if (Jurisdiction.buttonJurisdiction(MENU_URL, "del")) {
                 DelAllFile.delFolder(PathUtil.getClasspath() + Const.FILEPATHIMG + pd.getString("PATH")); 
                 _picturesService.delete(pd);
             }
@@ -112,10 +112,9 @@ public class PicturesController
         throws Exception
     {
         logBefore(logger, "modify Pictures");
-        ModelAndView mv = this.getModelAndView();
-        PageData pd = new PageData();
-        pd = this.getPageData();
-        if (Jurisdiction.buttonJurisdiction(menuUrl, "edit")) {
+        ModelAndView mv = getModelAndView();
+        PageData pd = getPageData();
+        if (Jurisdiction.buttonJurisdiction(MENU_URL, "edit")) {
             pd.put("PICTURES_ID", PICTURES_ID);
             pd.put("TITLE", TITLE);
             pd.put("MASTER_ID", MASTER_ID);
@@ -127,7 +126,7 @@ public class PicturesController
             String ffile = DateUtil.getDays(), fileName = "";
             if (null != file && !file.isEmpty()) {
                 String filePath = PathUtil.getClasspath() + Const.FILEPATHIMG + ffile;
-                fileName = FileUpload.fileUp(file, filePath, this.get32UUID());
+                fileName = FileUpload.fileUp(file, filePath, get32UUID());
                 pd.put("PATH", ffile + "/" + fileName);
                 pd.put("NAME", fileName);
             } else {
@@ -145,11 +144,9 @@ public class PicturesController
     public ModelAndView list(Page page)
     {
         logBefore(logger, "list Pictures");
-        ModelAndView mv = this.getModelAndView();
-        PageData pd = new PageData();
+        ModelAndView mv = getModelAndView();
+        PageData pd = getPageData();
         try {
-            pd = this.getPageData();
-
             String KEYW = pd.getString("keyword");
 
             if (null != KEYW && !"".equals(KEYW)) {
@@ -162,7 +159,7 @@ public class PicturesController
             mv.setViewName("information/pictures/pictures_list");
             mv.addObject("varList", varList);
             mv.addObject("pd", pd);
-            mv.addObject(Const.SESSION_QX, this.getHC());
+            mv.addObject(Const.SESSION_QX, getHC());
         } catch (Exception e) {
             logger.error(e.toString(), e);
         }
@@ -173,9 +170,8 @@ public class PicturesController
     public ModelAndView goAdd()
     {
         logBefore(logger, "go to new Pictures page");
-        ModelAndView mv = this.getModelAndView();
-        PageData pd = new PageData();
-        pd = this.getPageData();
+        ModelAndView mv = getModelAndView();
+        PageData pd = getPageData();
         try {
             mv.setViewName("information/pictures/pictures_add");
             mv.addObject("pd", pd);
@@ -189,9 +185,8 @@ public class PicturesController
     public ModelAndView goEdit()
     {
         logBefore(logger, "go to modify Pictures page");
-        ModelAndView mv = this.getModelAndView();
-        PageData pd = new PageData();
-        pd = this.getPageData();
+        ModelAndView mv = getModelAndView();
+        PageData pd = getPageData();
         try {
             pd = _picturesService.findById(pd);
             mv.setViewName("information/pictures/pictures_edit");
@@ -208,11 +203,10 @@ public class PicturesController
     public Object deleteAll()
     {
         logBefore(logger, "delete Pictures");
-        PageData pd = new PageData();
+        PageData pd = getPageData();
         Map<String, Object> map = new HashMap<String, Object>();
         try {
-            pd = this.getPageData();
-            if (Jurisdiction.buttonJurisdiction(menuUrl, "del")) {
+            if (Jurisdiction.buttonJurisdiction(MENU_URL, "del")) {
                 List<PageData> pdList = new ArrayList<PageData>();
                 List<PageData> pathList = new ArrayList<PageData>();
                 String DATA_IDS = pd.getString("DATA_IDS");
@@ -247,8 +241,7 @@ public class PicturesController
     {
         logBefore(logger, "export Pictures to excel");
         ModelAndView mv = new ModelAndView();
-        PageData pd = new PageData();
-        pd = this.getPageData();
+        PageData pd = getPageData();
         try {
             Map<String, Object> dataMap = new HashMap<String, Object>();
             List<String> titles = new ArrayList<String>();
@@ -285,8 +278,7 @@ public class PicturesController
     {
         logBefore(logger, "delete picture");
         try {
-            PageData pd = new PageData();
-            pd = this.getPageData();
+            PageData pd = getPageData();
             String PATH = pd.getString("PATH");
             DelAllFile.delFolder(PathUtil.getClasspath() + Const.FILEPATHIMG + pd.getString("PATH")); 
             if (PATH != null) {
