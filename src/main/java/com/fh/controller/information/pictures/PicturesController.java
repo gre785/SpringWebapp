@@ -93,7 +93,7 @@ public class PicturesController
         PageData pd = getPageData();
         try {
             if (Jurisdiction.buttonJurisdiction(MENU_URL, "del")) {
-                DelAllFile.delFolder(PathUtil.getClasspath() + Const.FILEPATHIMG + pd.getString("PATH")); 
+                DelAllFile.delFolder(PathUtil.getClasspath() + Const.FILEPATHIMG + pd.getString("PATH"));
                 _picturesService.delete(pd);
             }
             out.write("success");
@@ -279,10 +279,9 @@ public class PicturesController
         logBefore(logger, "delete picture");
         try {
             PageData pd = getPageData();
-            String PATH = pd.getString("PATH");
-            DelAllFile.delFolder(PathUtil.getClasspath() + Const.FILEPATHIMG + pd.getString("PATH")); 
-            if (PATH != null) {
-                _picturesService.delTp(pd);
+            DelAllFile.delFolder(PathUtil.getClasspath() + Const.FILEPATHIMG + pd.getString("PATH"));
+            if (pd.getString("PATH") != null) {
+                _picturesService.deleteImage(pd);
             }
             out.write("success");
             out.close();
@@ -294,15 +293,12 @@ public class PicturesController
     @SuppressWarnings("unchecked")
     public Map<String, String> getHC()
     {
-        Subject currentUser = SecurityUtils.getSubject();  // shiro session handling
-        Session session = currentUser.getSession();
-        return (Map<String, String>)session.getAttribute(Const.SESSION_QX);
+        return (Map<String, String>)SecurityUtils.getSubject().getSession().getAttribute(Const.SESSION_QX);
     }
 
     @InitBinder
     public void initBinder(WebDataBinder binder)
     {
-        DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        binder.registerCustomEditor(Date.class, new CustomDateEditor(format, true));
+        binder.registerCustomEditor(Date.class, new CustomDateEditor(new SimpleDateFormat("yyyy-MM-dd"), true));
     }
 }

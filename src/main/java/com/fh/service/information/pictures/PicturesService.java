@@ -93,7 +93,7 @@ public class PicturesService
     /*
     * delete image
     */
-    public void delTp(PageData pd)
+    public void deleteImage(PageData pd)
         throws Exception
     {
         _dao.update("PicturesMapper.delTp", pd);
