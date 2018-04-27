@@ -31,21 +31,14 @@ public class FileUtil
         if (!destDirName.endsWith(File.separator)) {
             destDirName = destDirName + File.separator;
         }
-        if (dir.mkdirs()) {
-            return true;
-        } else {
-            return false;
-        }
+        return dir.mkdirs();
     }
 
     public static void delFile(String filePathAndName)
     {
         try {
-            String filePath = filePathAndName;
-            filePath = filePath.toString();
-            java.io.File myDelFile = new java.io.File(filePath);
+            File myDelFile = new File(filePathAndName);
             myDelFile.delete();
-
         } catch (Exception e) {
             System.out.println("error during deleting");
             e.printStackTrace();
